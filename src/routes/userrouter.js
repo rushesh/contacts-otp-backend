@@ -9,10 +9,10 @@ const accounts  = require('../emails/account')
 
 const Nexmo = require('nexmo');
 
-// const nexmo = new Nexmo({
-//   apiKey: process.env.NEXMO_API_KEY,
-//   apiSecret: process.env.NEXMO_API_SECRET,
-// });
+const nexmo = new Nexmo({
+  apiKey: process.env.NEXMO_API_KEY,
+  apiSecret: process.env.NEXMO_API_SECRET,
+});
 
 UserRouter.post('/user/sendmessage',auth,async (req,res)=>{
 
