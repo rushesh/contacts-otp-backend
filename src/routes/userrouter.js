@@ -22,7 +22,7 @@ UserRouter.post('/user/sendmessage',auth,async (req,res)=>{
     const text = req.body.otp;
     const toname = req.body.clickedContact.fname+" "+req.body.clickedContact.lname;
     
-    nexmo.message.sendSms(from, to, text, (err, responseData) => {
+    nexmo.message.sendSms(from, to, text, async (err, responseData) => {
         if (err) {
             console.log(err);
         } else {
