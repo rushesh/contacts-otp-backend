@@ -22,8 +22,13 @@ UserRouter.post('/user/sendmessage',auth,async (req,res)=>{
     const text = req.body.otp;
     const toname = req.body.clickedContact.fname+" "+req.body.clickedContact.lname;
     
-     nexmo.message.sendSms(from, to, text);  
-     console.log(from,to,text);  
+    nexmo.message.sendSms(from, to, text, (err, responseData) => {
+        if (err) {
+            console.log(err);
+        } else {
+            if(responseData.messages[0]['status'] === "0") {
+                console.log("Message sent successfully.");
+                console.log(from,to,text);  
      const msg = {
          to:to,
          message:text,
@@ -34,9 +39,18 @@ UserRouter.post('/user/sendmessage',auth,async (req,res)=>{
      req.user.messagessent.push(msg)
      console.log("User : ",req.user)
      await req.user.save()
-     res.send({
+     return res.send({
          from,to,text
      })
+            } else {
+                console.log(`Message failed with error: ${responseData.messages[0]['error-text']}`);
+                return res.send({
+                        error:`${responseData.messages[0]['error-text']}`
+                })
+            }
+        }
+    })
+     
 })
 
 const upload = multer({
