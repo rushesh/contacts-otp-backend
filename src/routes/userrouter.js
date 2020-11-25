@@ -16,7 +16,7 @@ const nexmo = new Nexmo({
 
 UserRouter.post('/user/sendmessage',auth,async (req,res)=>{
 
-    const from = 'Contactto Apps';
+    const from = 'Contactto App';
     console.log(req.body);
     const to = req.body.clickedContact.number;
     const text = req.body.otp;
@@ -24,7 +24,8 @@ UserRouter.post('/user/sendmessage',auth,async (req,res)=>{
     
     nexmo.message.sendSms(from, to, text, async (err, responseData) => {
         if (err) {
-            console.log(err);
+            console.log("Error : "+err);
+            return res.status(400).send({err})
         } else {
             if(responseData.messages[0]['status'] === "0") {
                 console.log("Message sent successfully.");
@@ -37,7 +38,7 @@ UserRouter.post('/user/sendmessage',auth,async (req,res)=>{
          timestring:new Date().toLocaleString()
      } 
      req.user.messagessent.push(msg)
-     console.log("User : ",req.user)
+     //console.log("User : ",req.user)
      await req.user.save()
      return res.send({
          from,to,text
